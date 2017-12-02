@@ -17,4 +17,18 @@ class Post extends Model
 
         return $imageUrl;
     }
+
+    public function getDateAttribute($value) {
+
+        return $this->created_at->diffForHumans();
+    }
+
+
+    public function author() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function scopeLatestFirst($value='') {
+        return $this->orderBy('created_at', 'asc');
+    }
 }
