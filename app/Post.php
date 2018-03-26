@@ -54,4 +54,8 @@ class Post extends Model
         return $this->body ? Markdown::convertToHtml(e($this->body)) : NULL;
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
