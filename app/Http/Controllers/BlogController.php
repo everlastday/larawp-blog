@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Post;
+use App\User;
+
 class BlogController extends Controller
 {
     protected $limit = 3;
@@ -28,6 +30,18 @@ class BlogController extends Controller
             ->simplePaginate($this->limit);
 
         return view("blog.index", compact('posts', 'categoryName'));
+    }
+
+    public function author(User $author)
+    {
+        $authorName = $author->name;
+        $posts = $author->posts()
+            ->with('category')
+            ->latestFirst()
+            ->published()
+            ->simplePaginate($this->limit);
+
+        return view("blog.index", compact('posts', 'authorName'));
     }
 
 
