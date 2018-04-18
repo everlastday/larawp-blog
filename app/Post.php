@@ -44,6 +44,12 @@ class Post extends Model
         return $query->where("published_at", "<=", Carbon::now());
     }
 
+    public function scopePopular($query)
+    {
+        return $query->orderBy("view_count", 'desc');
+    }
+
+
     public function getExcerptHtmlAttribute($value)
     {
         return $this->excerpt ? Markdown::convertToHtml(e($this->excerpt)) : NULL;
