@@ -32,4 +32,9 @@ Route::get('/author/{author}', [
 ]);
 Auth::routes();
 
-Route::get('/home', 'Backend\HomeController@index')->name('home');
+
+Route::prefix('backend')->group(function () {
+    Route::get('/', 'Backend\HomeController@index')->name('home');
+    Route::resource('/blog', 'Backend\BlogController', ['as' => 'backend']);
+});
+
