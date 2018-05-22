@@ -25,11 +25,11 @@
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
-                                    <td>Action</td>
+                                    <td width="80">Action</td>
                                     <td>Title</td>
-                                    <td>Author</td>
-                                    <td>Category</td>
-                                    <td>Date</td>
+                                    <td width="120">Author</td>
+                                    <td width="150">Category</td>
+                                    <td width="170">Date</td>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -47,8 +47,12 @@
                                         </td>
                                         <td>{{ $post->title }}</td>
                                         <td>{{ $post->author->name }}</td>
-                                        <td>{{ $post->category->name }}</td>
-                                        <td>{{ $post->created_at }}</td>
+                                        <td>{{ $post->category->title }}</td>
+                                        <td>
+                                            <abbr title="{{ $post->dateFormatted(true) }}">{{ $post->dateFormatted() }}</abbr>
+                                            {!!   $post->publicationLabel() !!}
+
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -57,16 +61,11 @@
                         <!-- /.box-body -->
                         <div class="box-footer clearfix">
                             <div class="pull-left">
-                                <ul class="pagination no-margin">
-                                    <li><a href="#">&laquo;</a></li>
-                                    <li><a href="#">1</a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">&raquo;</a></li>
-                                </ul>
+                                {{ $posts->links() }}
                             </div>
                             <div class="pull-right">
-                                <small>5 items</small>
+                                <?php $postCount = $posts->count() ?>
+                                <small>{{ $postCount }} {{ str_plural('Item', $postCount) }}</small>
                             </div>
                         </div>
                     </div>

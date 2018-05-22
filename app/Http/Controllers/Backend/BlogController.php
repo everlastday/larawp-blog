@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
+    protected $limit = 5;
+
     /**
      * Create a new controller instance.
      *
@@ -24,7 +26,10 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+
+        $posts = Post::with('category', 'author')
+            ->latest()
+            ->paginate($this->limit);
         return view("backend.blog.index", compact('posts'));
     }
 
