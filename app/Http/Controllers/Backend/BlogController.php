@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Post;
-use Illuminate\Http\Request;
-
+use App\Http\Requests;
 class BlogController extends Controller
 {
     protected $limit = 5;
@@ -45,4 +44,14 @@ class BlogController extends Controller
     {
         return view('backend.blog.create', compact('post'));
     }
+
+
+    public function store(Requests\PostRequest $request)
+    {
+
+        $request->user()->posts()->create($request->all());
+
+        return redirect('/backend/blog')->with('message', 'Your post was created successfully!');
+    }
+
 }
