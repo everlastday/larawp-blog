@@ -4,19 +4,19 @@ namespace App\Http\Controllers\Backend;
 
 use App\Post;
 use App\Http\Requests;
+
 class BlogController extends Controller
 {
     protected $limit = 5;
+    protected $uploadPath;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
-        //$this->middleware('auth');
+
+        parent::__construct();
+        $this->uploadPath = public_path('img');
     }
+
 
     /**
      * Show the application dashboard.
@@ -49,9 +49,28 @@ class BlogController extends Controller
     public function store(Requests\PostRequest $request)
     {
 
-        $request->user()->posts()->create($request->all());
+        $data = $this->handleRequest($request);
+
+
+        $request->user()->posts()->create($data);
 
         return redirect('/backend/blog')->with('message', 'Your post was created successfully!');
+    }
+
+    public function handleRequest($request)
+    {
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $fileName = $image->getClientOriginalName();
+            $destination = $this->uploadPath;
+            $image->move($destination, $fileName);
+
+            $data['image'] = $fileName;
+        }
+
+        return $data;
     }
 
 }
