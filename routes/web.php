@@ -35,6 +35,10 @@ Auth::routes();
 
 Route::prefix('backend')->group(function () {
     Route::get('/', 'Backend\HomeController@index')->name('home');
+    Route::put('/blog/restore/{blog}', [
+        'uses' => 'Backend\BlogController@restore',
+        'as' => 'backend.blog.restore'
+    ]);
     Route::resource('/blog', 'Backend\BlogController', ['as' => 'backend']);
 });
 
