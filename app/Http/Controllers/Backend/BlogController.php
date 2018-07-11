@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Post;
 use App\Http\Requests;
+use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 
 class BlogController extends Controller
@@ -24,15 +25,25 @@ class BlogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if (($status = $request->get('status')) && $status == 'trash') {
+            $posts = Post::onlyTrashed()->with('category', 'author')
+                ->latest()
+                ->paginate($this->limit);
+            $postCount = Post::onlyTrashed()->count();
+            $onlyTrashed = TRUE;
 
-        $posts = Post::with('category', 'author')
-            ->latest()
-            ->paginate($this->limit);
-        $postCount = Post::count();
+        } else {
+            $posts = Post::with('category', 'author')
+                ->latest()
+                ->paginate($this->limit);
+            $postCount = Post::count();
+            $onlyTrashed = FALSE;
+        }
 
-        return view("backend.blog.index", compact('posts', 'postCount'));
+
+        return view("backend.blog.index", compact('posts', 'postCount', 'onlyTrashed'));
     }
 
     /**
@@ -121,4 +132,12 @@ class BlogController extends Controller
         return redirect('/backend/blog')->with('message', 'Your post has been moved from the Trash ');
 
     }
+
+    public function forceDestroy($id)
+    {
+        Post::withTrashed()->findOrFail($id)->forceDelete();
+
+        return redirect('/backend/blog?status=trash')->with('message', 'Your post has been deleted successfully');
+    }
+
 }
