@@ -46,12 +46,10 @@ class Post extends Model
         return $imageUrl;
     }
 
-
     public function getDateAttribute($value)
     {
         return is_null($this->published_at) ? '' : $this->published_at->diffForHumans();
     }
-
 
     public function author()
     {
@@ -68,11 +66,20 @@ class Post extends Model
         return $query->where("published_at", "<=", Carbon::now());
     }
 
+    public function scopeScheduled($query)
+    {
+        return $query->where("published_at", ">", Carbon::now());
+    }
+
+    public function scopeDraft($query)
+    {
+        return $query->whereNull("published_at");
+    }
+
     public function scopePopular($query)
     {
         return $query->orderBy("view_count", 'desc');
     }
-
 
     public function getExcerptHtmlAttribute($value)
     {
@@ -102,12 +109,10 @@ class Post extends Model
         }
     }
 
-
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
-
 
     public function setPublishedAtAttribute($value)
     {
