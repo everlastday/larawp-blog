@@ -46,5 +46,6 @@ Route::prefix('backend')->group(function () {
     ]);
 
     Route::resource('/blog', 'Backend\BlogController', ['as' => 'backend']);
+    Route::resource('/categories', 'Backend\CategoriesController', ['as' => 'backend']);
 });
 
