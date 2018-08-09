@@ -8,4 +8,5 @@ return [
         ]
     ],
     'default_category_id' => 12,
+    'default_user_id' => 1,
 ];

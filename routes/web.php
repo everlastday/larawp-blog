@@ -47,5 +47,11 @@ Route::prefix('backend')->group(function () {
 
     Route::resource('/blog', 'Backend\BlogController', ['as' => 'backend']);
     Route::resource('/categories', 'Backend\CategoriesController', ['as' => 'backend']);
+    Route::resource('/users', 'Backend\UsersController', ['as' => 'backend']);
+    Route::get('backend/users/confirm/{users}', [
+        'uses' => 'Backend\UsersController@confirm',
+        'as' => 'backend.users.confirm'
+    ]);
+
 });
 
